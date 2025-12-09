@@ -13,7 +13,7 @@ dependencies = [
     "pydantic>=2.0",
     "numpy>=1.21",
     "composipy",
-    "lamprop",
+    "lamprop @ git+https://github.com/rsmith-nl/lamprop.git",
     "pyvista",
     "dolfin",
     "anba4",
