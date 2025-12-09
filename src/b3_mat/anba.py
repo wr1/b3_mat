@@ -8,17 +8,17 @@ from typing import Dict
 import numpy as np
 from anba4 import material as anba_material
 
-from .materials import MaterialDB, IsotropicMaterial, OrthotropicMaterial
-
 logger = logging.getLogger(__name__)
 
 
-def get_material_db_anba(material_map: str, unit_factor: float = 1.0) -> Dict[str, anba_material.Material]:
+def get_material_db_anba(
+    material_map: str, unit_factor: float = 1.0
+) -> Dict[str, anba_material.Material]:
     """Load and process material database for ANBA from JSON material map."""
     if not os.path.isfile(material_map):
         raise FileNotFoundError(f"Material map file not found: {material_map}")
 
-    with open(material_map, "r") as f:
+    with open(material_map) as f:
         mm1 = json.load(f)
         mm = mm1.get("map", mm1)
         mat_db_data = mm1.get("matdb", None)
@@ -40,7 +40,15 @@ def get_material_db_anba(material_map: str, unit_factor: float = 1.0) -> Dict[st
 
         if "Ex" in matdb_entry and "Ey" in matdb_entry and "Ez" in matdb_entry:
             required_keys = [
-                "Ex", "Ey", "Ez", "Gxy", "Gxz", "Gyz", "nuxy", "nuxz", "nuyz"
+                "Ex",
+                "Ey",
+                "Ez",
+                "Gxy",
+                "Gxz",
+                "Gyz",
+                "nuxy",
+                "nuxz",
+                "nuyz",
             ]
             if not all(k in matdb_entry for k in required_keys):
                 raise ValueError(f"Missing orthotropic properties for {matdb_id}")
@@ -54,7 +62,9 @@ def get_material_db_anba(material_map: str, unit_factor: float = 1.0) -> Dict[st
             matMechanicProp[2, 2] = matdb_entry["nuyz"]
             matMechanicProp[2, 1] = matdb_entry["nuxz"]
             matMechanicProp[2, 0] = matdb_entry["nuxy"]
-            materials[matdb_id] = anba_material.OrthotropicMaterial(matMechanicProp, density)
+            materials[matdb_id] = anba_material.OrthotropicMaterial(
+                matMechanicProp, density
+            )
         else:
             if "E" not in matdb_entry and "Ex" not in matdb_entry:
                 raise ValueError(f"Missing 'E' or 'Ex' for isotropic {matdb_id}")
@@ -63,5 +73,6 @@ def get_material_db_anba(material_map: str, unit_factor: float = 1.0) -> Dict[st
             materials[matdb_id] = anba_material.IsotropicMaterial([E, nu], density)
 
     return materials
+
 
 # Note: Additional ANBA-specific functions like solve_anba4 can be added here if needed.
