@@ -2,14 +2,13 @@
 
 from typing import List, Tuple
 
-import numpy as np
 from lamprop import Laminate
 
 from .materials import OrthotropicMaterial
 
 
 def calculate_laminate_properties(
-    layers: List[Tuple[OrthotropicMaterial, float, float]]
+    layers: List[Tuple[OrthotropicMaterial, float, float]],
 ) -> dict:
     """Calculate laminate properties using lamprop.
 
@@ -22,12 +21,7 @@ def calculate_laminate_properties(
     lam = Laminate()
     for mat, t, angle in layers:
         lam.add_layer(
-            E1=mat.Ex,
-            E2=mat.Ey,
-            v12=mat.nuxy,
-            G12=mat.Gxy,
-            thickness=t,
-            angle=angle
+            E1=mat.Ex, E2=mat.Ey, v12=mat.nuxy, G12=mat.Gxy, thickness=t, angle=angle
         )
     return {
         "A": lam.A,
