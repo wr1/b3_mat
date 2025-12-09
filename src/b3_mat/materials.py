@@ -4,13 +4,13 @@ import json
 import os
 from typing import Dict, Optional, Union
 
-import numpy as np
 import yaml
 from pydantic import BaseModel, Field, validator
 
 
 class IsotropicMaterial(BaseModel):
     """Isotropic material model."""
+
     E: float = Field(..., description="Young's modulus")
     nu: float = Field(..., ge=0, le=0.49, description="Poisson's ratio")
     rho: float = Field(..., gt=0, description="Density")
@@ -23,6 +23,7 @@ class IsotropicMaterial(BaseModel):
 
 class OrthotropicMaterial(BaseModel):
     """Orthotropic material model."""
+
     Ex: float = Field(..., gt=0, description="Young's modulus in x")
     Ey: float = Field(..., gt=0, description="Young's modulus in y")
     Ez: float = Field(..., gt=0, description="Young's modulus in z")
@@ -41,6 +42,7 @@ Material = Union[IsotropicMaterial, OrthotropicMaterial]
 
 class MaterialDB(BaseModel):
     """Database of materials."""
+
     materials: Dict[str, Material] = Field(default_factory=dict)
 
     @classmethod
@@ -48,7 +50,7 @@ class MaterialDB(BaseModel):
         """Load materials from YAML file."""
         if not os.path.isfile(filepath):
             raise FileNotFoundError(f"File not found: {filepath}")
-        with open(filepath, "r") as f:
+        with open(filepath) as f:
             data = yaml.safe_load(f)
         materials = {}
         for key, props in data.items():
@@ -63,7 +65,7 @@ class MaterialDB(BaseModel):
         """Load materials from JSON file."""
         if not os.path.isfile(filepath):
             raise FileNotFoundError(f"File not found: {filepath}")
-        with open(filepath, "r") as f:
+        with open(filepath) as f:
             data = json.load(f)
         materials = {}
         for key, props in data.items():
