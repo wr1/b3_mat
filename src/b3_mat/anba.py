@@ -1,4 +1,5 @@
 """Export materials to ANBA format."""
+
 from __future__ import annotations
 
 import json
