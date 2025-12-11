@@ -17,11 +17,10 @@ def main():
     args = parser.parse_args()
 
     if args.file.endswith(".yml") or args.file.endswith(".yaml"):
-        mat_db = MaterialDB.from_yaml(args.file)
+        MaterialDB.from_yaml(args.file)
     elif args.file.endswith(".json"):
-        mat_db = MaterialDB.from_json(args.file)
+        MaterialDB.from_json(args.file)
     else:
-        print("Unsupported file format. Use .yml, .yaml, or .json")
         sys.exit(1)
 
     if args.output == "calculix":
@@ -29,16 +28,13 @@ def main():
 
         # Assuming materials list is needed; for demo, use dummy
         materials = [1.0]  # Placeholder
-        block = material_db_to_ccx(materials, args.matmap)
-        print(block)
+        material_db_to_ccx(materials, args.matmap)
     elif args.output == "anba":
         from .anba import get_material_db_anba
 
-        anba_mats = get_material_db_anba(args.matmap)
-        print("ANBA materials loaded")
+        get_material_db_anba(args.matmap)
     else:
-        print("Loaded material DB")
-        print(mat_db)
+        pass
 
 
 if __name__ == "__main__":

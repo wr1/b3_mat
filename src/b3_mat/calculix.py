@@ -1,9 +1,9 @@
 """Export materials to Calculix format."""
+from __future__ import annotations
 
 import json
 import logging
 import os
-from typing import List
 
 import numpy as np
 
@@ -11,11 +11,12 @@ logger = logging.getLogger(__name__)
 
 
 def material_db_to_ccx(
-    materials: List[float], matmap: str, force_iso: bool = False
+    materials: list[float], matmap: str, force_iso: bool = False
 ) -> str:
     """Generate Calculix material block from material map."""
     if not os.path.isfile(matmap):
-        raise FileNotFoundError("No material map defined")
+        msg = "No material map defined"
+        raise FileNotFoundError(msg)
 
     with open(matmap) as f:
         mm1 = json.load(f)

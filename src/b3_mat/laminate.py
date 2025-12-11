@@ -1,14 +1,16 @@
 """Laminate theory calculations using lamprop."""
+from __future__ import annotations
 
-from typing import List, Tuple
+from typing import TYPE_CHECKING
 
 from lamprop import Laminate
 
-from .materials import OrthotropicMaterial
+if TYPE_CHECKING:
+    from .materials import OrthotropicMaterial
 
 
 def calculate_laminate_properties(
-    layers: List[Tuple[OrthotropicMaterial, float, float]],
+    layers: list[tuple[OrthotropicMaterial, float, float]],
 ) -> dict:
     """Calculate laminate properties using lamprop.
 

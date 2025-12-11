@@ -1,8 +1,9 @@
 """Material data models using Pydantic."""
+from __future__ import annotations
 
 import json
 import os
-from typing import Dict, Optional, Union
+from typing import Union
 
 import yaml
 from pydantic import BaseModel, Field, validator
@@ -14,10 +15,10 @@ class IsotropicMaterial(BaseModel):
     E: float = Field(..., description="Young's modulus")
     nu: float = Field(..., ge=0, le=0.49, description="Poisson's ratio")
     rho: float = Field(..., gt=0, description="Density")
-    name: Optional[str] = None
+    name: str | None = None
 
     @validator("nu", pre=True, always=True)
-    def clamp_nu(cls, v):
+    def clamp_nu(self, v):
         return min(v, 0.49)
 
 
@@ -34,7 +35,7 @@ class OrthotropicMaterial(BaseModel):
     nuxz: float = Field(..., description="Poisson's ratio xz")
     nuyz: float = Field(..., description="Poisson's ratio yz")
     rho: float = Field(..., gt=0, description="Density")
-    name: Optional[str] = None
+    name: str | None = None
 
 
 Material = Union[IsotropicMaterial, OrthotropicMaterial]
@@ -43,13 +44,14 @@ Material = Union[IsotropicMaterial, OrthotropicMaterial]
 class MaterialDB(BaseModel):
     """Database of materials."""
 
-    materials: Dict[str, Material] = Field(default_factory=dict)
+    materials: dict[str, Material] = Field(default_factory=dict)
 
     @classmethod
-    def from_yaml(cls, filepath: str) -> "MaterialDB":
+    def from_yaml(cls, filepath: str) -> MaterialDB:
         """Load materials from YAML file."""
         if not os.path.isfile(filepath):
-            raise FileNotFoundError(f"File not found: {filepath}")
+            msg = f"File not found: {filepath}"
+            raise FileNotFoundError(msg)
         with open(filepath) as f:
             data = yaml.safe_load(f)
         materials = {}
@@ -61,10 +63,11 @@ class MaterialDB(BaseModel):
         return cls(materials=materials)
 
     @classmethod
-    def from_json(cls, filepath: str) -> "MaterialDB":
+    def from_json(cls, filepath: str) -> MaterialDB:
         """Load materials from JSON file."""
         if not os.path.isfile(filepath):
-            raise FileNotFoundError(f"File not found: {filepath}")
+            msg = f"File not found: {filepath}"
+            raise FileNotFoundError(msg)
         with open(filepath) as f:
             data = json.load(f)
         materials = {}
