@@ -1,0 +1,9 @@
+pydantic>=2.0
+numpy>=1.21
+composipy
+lamprop @ git+https://github.com/wr1/lamprop.git
+pyvista
+
+[test]
+pytest
+ruff
