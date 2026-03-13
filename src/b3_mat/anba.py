@@ -56,18 +56,18 @@ def get_material_db_anba(
             if not all(k in matdb_entry for k in required_keys):
                 msg = f"Missing orthotropic properties for {matdb_id}"
                 raise ValueError(msg)
-            matMechanicProp = np.zeros((3, 3))
-            matMechanicProp[0, 2] = matdb_entry["Ex"] * unit_factor
-            matMechanicProp[0, 1] = matdb_entry["Ey"] * unit_factor
-            matMechanicProp[0, 0] = matdb_entry["Ez"] * unit_factor
-            matMechanicProp[1, 2] = matdb_entry["Gyz"] * unit_factor
-            matMechanicProp[1, 1] = matdb_entry["Gxz"] * unit_factor
-            matMechanicProp[1, 0] = matdb_entry["Gxy"] * unit_factor
-            matMechanicProp[2, 2] = matdb_entry["nuyz"]
-            matMechanicProp[2, 1] = matdb_entry["nuxz"]
-            matMechanicProp[2, 0] = matdb_entry["nuxy"]
+            mat_mechanic_prop = np.zeros((3, 3))
+            mat_mechanic_prop[0, 2] = matdb_entry["Ex"] * unit_factor
+            mat_mechanic_prop[0, 1] = matdb_entry["Ey"] * unit_factor
+            mat_mechanic_prop[0, 0] = matdb_entry["Ez"] * unit_factor
+            mat_mechanic_prop[1, 2] = matdb_entry["Gyz"] * unit_factor
+            mat_mechanic_prop[1, 1] = matdb_entry["Gxz"] * unit_factor
+            mat_mechanic_prop[1, 0] = matdb_entry["Gxy"] * unit_factor
+            mat_mechanic_prop[2, 2] = matdb_entry["nuyz"]
+            mat_mechanic_prop[2, 1] = matdb_entry["nuxz"]
+            mat_mechanic_prop[2, 0] = matdb_entry["nuxy"]
             materials[matdb_id] = anba_material.OrthotropicMaterial(
-                matMechanicProp, density
+                mat_mechanic_prop, density
             )
         else:
             if "E" not in matdb_entry and "Ex" not in matdb_entry:
