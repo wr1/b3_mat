@@ -7,7 +7,7 @@ import os
 from typing import Union
 
 import yaml
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 
 
 class IsotropicMaterial(BaseModel):
@@ -18,9 +18,13 @@ class IsotropicMaterial(BaseModel):
     rho: float = Field(..., gt=0, description="Density")
     name: str | None = None
 
-    @validator("nu", pre=True, always=True)
-    def clamp_nu(self, v):
-        return min(v, 0.49)
+    @field_validator("nu", mode="before")
+    @classmethod
+    def clamp_nu(cls, v: float) -> float:
+        """Clamp Poisson's ratio to max 0.49."""
+        if isinstance(v, (int, float)):
+            return min(v, 0.49)
+        return v
 
 
 class OrthotropicMaterial(BaseModel):

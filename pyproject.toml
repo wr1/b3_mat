@@ -12,11 +12,9 @@ requires-python = ">=3.8"
 dependencies = [
     "pydantic>=2.0",
     "numpy>=1.21",
-    "composipy",
-    "lamprop @ git+https://github.com/wr1/lamprop.git",
-    "pyvista",
-    # "dolfin",
-    # "anba4",
+    "pyyaml",
+    # Optional / heavy backends (import-only when used):
+    # composipy, lamprop, pyvista, anba4, dolfin
 ]
 
 [project.optional-dependencies]
